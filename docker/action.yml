@@ -46,6 +46,9 @@ inputs:
   buildArgs:
     description: 'Multiline string with build args of the form ARG=VALUE'
     required: false
+  cacheFrom:
+    description: 'Provide source image to cache from'
+    required: false
 
 runs:
   using: 'node12'

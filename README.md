@@ -67,7 +67,7 @@ steps:
       version: 1.0.0-SNAPSHOT
 ```
 
-Optionally, you can also specify `context`, `dockerfile` and `buildArgs`:
+Optionally, you can also specify `context`, `dockerfile`, `buildArgs`, and `cacheFrom`:
 
 ```
 steps:
@@ -84,6 +84,7 @@ steps:
       buildArgs: |
         ARG1=foo
         ARG2=bar
+      cacheFrom: source-image
 ```
 
 ## artifactory-publish/npm

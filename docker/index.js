@@ -15,6 +15,7 @@ const tychoPath = core.getInput('tycho');
 const provisioningPath = core.getInput('provisioning');
 const skipProvisioning = core.getInput('skipProvisioning');
 const buildArgs = core.getMultilineInput('buildArgs') || [];
+const cacheFrom = core.getInput('cacheFrom');
 
 const imageTag = `${host}/${path}/${name}`;
 
@@ -29,10 +30,16 @@ try {
   exec(`docker login -u ${username} -p ${password} ${host}`);
   core.info(`logged into ${host}`);
   const buildArgsPart = buildArgs.map(arg => `--build-arg ${arg}`).join(' ');
-  exec(`docker build -f ${dockerfile} -t ${imageTag}:${targetVersion} ${buildArgsPart} ${context}`);
+  const cacheFromPart = cacheFrom ? `--cache-from ${cacheFrom}` : '';
+  exec(`docker build -f ${dockerfile} ${cacheFromPart} -t ${imageTag}:${targetVersion} ${buildArgsPart} ${context}`);
   core.info('docker build successfully');
   exec(`docker push ${imageTag}:${targetVersion}`);
   core.info(`docker push finished ${imageTag}:${targetVersion}`);
+  if (cacheFrom) {
+    const latestTag = `${imageTag}:latest`;
+    exec(`docker tag ${imageTag}:${targetVersion} ${latestTag}`);
+    exec(`docker push ${latestTag}`);
+  }
 } catch (e) {
   core.setFailed(e);
 }
