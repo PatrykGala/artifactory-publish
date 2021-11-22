@@ -19,6 +19,7 @@ const tychoPath = core.getInput('tycho');
 const provisioningPath = core.getInput('provisioning');
 const distributionsDir = core.getInput('distributionsDir');
 const releaseTagPrefix = core.getInput('releaseTagPrefix');
+const fileNameSuffix = core.getInput('fileNameSuffix');
 const currentBranch = getBranchName();
 
 reportAction();
@@ -32,12 +33,12 @@ const isSnapshot = !['master', 'main'].includes(currentBranch) && !validSemVer(c
 if (isSnapshot) core.info('this is a snapshot release');
 
 if (buildDir) {
-  publishBuildDir(buildDir, includeDotFiles, deployArtifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot))
+  publishBuildDir(buildDir, includeDotFiles, deployArtifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot, fileNameSuffix))
     .catch((e) => core.setFailed(e))
     .then(() => publishProvisioning(tychoPath, provisioningPath, provisioningArtifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot)))
     .catch((e) => core.setFailed(e));
 } else {
-  publishDistributions(distributionsDir, deployArtifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot))
+  publishDistributions(distributionsDir, deployArtifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot, fileNameSuffix))
     .catch((e) => core.setFailed(e))
     .then(() => publishProvisioning(tychoPath, provisioningPath, provisioningArtifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot)))
     .catch((e) => core.setFailed(e));

@@ -1,6 +1,6 @@
 module.exports = {
-  deployArtifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot, snapshotSuffix = '-SNAPSHOT') {
-    return artifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot, '-deploy.zip', snapshotSuffix);
+  deployArtifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot, fileNameSuffix = '-deploy.zip', snapshotSuffix = '-SNAPSHOT',) {
+    return artifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot, fileNameSuffix, snapshotSuffix);
   },
 
   provisioningArtifactUrl(username, password, host, group, name, version, currentBranch, isSnapshot, snapshotSuffix = '-SNAPSHOT') {
